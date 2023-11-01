@@ -1,1 +1,921 @@
+MACRO BOARD_MACRO
+    ; CLEAR SCREEN        
+    MOV AX, 0600H 
+    MOV BH, 0F0H 
+    MOV CX, 0000H 
+    MOV DX, 184FH 
+    INT 10H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV BH, 0
+    MOV DH, 6
+    MOV DL, 30
+    INT 10H   
 
+    LEA DX, L1
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR 
+    MOV AH, 2
+    MOV DH, 7
+    MOV DL, 30 
+    INT 10H
+
+    MOV AH, 2
+    MOV DL, 32
+    INT 21H
+
+    ; CELL 1 
+
+    LEA DX, C1
+    MOV AH, 9
+    INT 21H 
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 2
+
+    LEA DX, C2
+    MOV AH, 9
+    INT 21H
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 3
+
+    LEA DX, C3
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 8
+    MOV DL, 30 
+    INT 10H 
+
+    LEA DX, L2
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 9
+    MOV DL, 30 
+    INT 10H
+
+    LEA DX, L1
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 10
+    MOV DL, 30 
+    INT 10H
+
+    MOV AH, 2
+    MOV DL, 32
+    INT 21H
+
+    ; CELL 4 
+
+    LEA DX, C4
+    MOV AH, 9
+    INT 21H 
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 5
+
+    LEA DX, C5
+    MOV AH, 9
+    INT 21H
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 6
+
+    LEA DX, C6
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 11
+    MOV DL, 30 
+    INT 10H
+
+    LEA DX, L1
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 12
+    MOV DL, 30 
+    INT 10H 
+
+    LEA DX, L2
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 13
+    MOV DL, 30 
+    INT 10H
+
+    LEA DX, L1
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 14
+    MOV DL, 30 
+    INT 10H 
+
+    MOV AH, 2
+    MOV DL, 32
+    INT 21H
+
+    ; CELL 7
+
+    LEA DX, C7
+    MOV AH, 9
+    INT 21H 
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 8
+
+    LEA DX, C8
+    MOV AH, 9
+    INT 21H
+
+    LEA DX, N1
+    MOV AH, 9
+    INT 21H
+
+    ; CELL 9
+
+    LEA DX, C9
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 15
+    MOV DL, 30 
+    INT 10H 
+
+    LEA DX, L1
+    MOV AH, 9
+    INT 21H 
+
+    ; SET CURSOR 
+    MOV AH, 2
+    MOV DH, 16
+    MOV DL, 20 
+    INT 10H
+
+    CMP DONE, 1
+    JZ VICTORY
+
+    CMP DR, 1
+    JZ DRAW.
+ENDM
+          
+      
+INPUT_MACRO MACRO
+    
+    LEA DX, W1
+    MOV AH, 9
+    INT 21H
+    
+    MOV AH, 2
+    MOV DL, PLAYER
+    INT 21H
+    
+    CMP PLAYER, 49
+    JZ PL1
+    
+    LEA DX, PC2
+    MOV AH, 9
+    INT 21H
+    JMP TAKEINPUT
+    
+    
+    PL1:
+        LEA DX, PC1
+        MOV AH, 9
+        INT 21H 
+    
+    TAKEINPUT:
+    LEA DX, INP
+    MOV AH, 9
+    INT 21H
+    
+    MOV AH, 1
+    INT 21H 
+    
+   
+    
+    INC MOVES ; INCREMENTING MOVES COUNTER BY 1
+     
+    MOV BL, AL 
+    SUB BL, 48
+    
+    MOV CL, CUR 
+    
+       
+    
+    ; CHECKING IF INPUT IS BETWEEN 1-9
+    CMP BL, 1
+    JZ  C1U 
+    
+    CMP BL, 2
+    JZ  C2U
+    
+    CMP BL, 3
+    JZ  C3U
+    
+    CMP BL, 4
+    JZ  C4U
+    
+    CMP BL, 5
+    JZ  C5U
+    
+    CMP BL, 6
+    JZ  C6U
+    
+    CMP BL, 7
+    JZ  C7U
+    
+    CMP BL, 8
+    JZ  C8U
+    
+    CMP BL, 9
+    JZ  C9U  
+    ;---------------------------------
+    
+    
+    ; IF INPUT IS INVALID
+    
+    DEC MOVES ; DECREMENTING MOVES BY 1, SINCE IT WAS INVALID
+    
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H 
+        
+    LEA DX, WI  ; WRONG INPUT MESSAGE
+    MOV AH, 9
+    INT 21H
+    
+    MOV AH, 7   ; INPUT WITHOUT ECHO
+    INT 21H
+    
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H
+        
+    LEA DX, EMP  ; CLEARING THAT LINE
+    MOV AH, 9
+    INT 21H  
+    
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H
+    
+    JMP INPUT
+    
+    
+    TAKEN:
+        DEC MOVES
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H   
+            
+        LEA DX, TKN   ; DISPLAY THAT THE CELL IS TAKEN
+        MOV AH, 9
+        INT 21H  
+        
+        MOV AH, 7     ; INPUT WITHOUT ECHO
+        INT 21H 
+        
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H
+            
+        LEA DX, EMP   ; EMPTY LINE TO OVERWRITE ANOTHER LINE TO CLEAN THE SPACE
+        MOV AH, 9
+        INT 21H 
+        
+        ; SET CURSOR 
+        MOV AH, 2
+        MOV DH, 16
+        MOV DL, 20 
+        INT 10H
+        
+        JMP INPUT
+        
+        
+    
+    
+    ; ADJUST 
+    
+    ; SETTING BOARD POSITION AS INPUT MARK
+        C1U:
+            CMP C1, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C1, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C1, CL
+            JMP CHECK
+             
+        C2U:
+            CMP C2, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C2, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C2, CL
+            JMP CHECK
+        C3U:
+            CMP C3, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C3, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C3, CL
+            JMP CHECK
+        C4U: 
+            CMP C4, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C4, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C4, CL
+            JMP CHECK 
+        C5U: 
+            CMP C5, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C5, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C5, CL
+            JMP CHECK
+        C6U:
+            CMP C6, 88  ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C6, 79  ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C6, CL
+            JMP CHECK
+        C7U: 
+            CMP C7, 88   ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C7, 79   ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C7, CL
+            JMP CHECK 
+        C8U: 
+            CMP C8, 88   ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C8, 79   ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C8, CL
+            JMP CHECK
+        C9U:
+            CMP C9, 88   ; CHECKING IF THE CELL IS ALREADY 'X'
+            JZ TAKEN
+            CMP C9, 79   ; CHECKING IF THE CELL IS ALREADY 'O'
+            JZ TAKEN 
+            
+            MOV C9, CL
+            JMP CHECK 
+            ENDM
+
+
+
+TITLESCREEN_MACRO MACRO
+    ; LOGO DISPLAY START -----------------
+
+     MOV AH, 2
+    MOV BH, 0
+    MOV DH, 6
+    MOV DL, 14
+    INT 10H
+
+    LEA DX, T1
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 7
+    MOV DL, 14
+    INT 10H
+
+    LEA DX, T2
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 8
+    MOV DL, 14
+    INT 10H
+
+    LEA DX, T3
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 9
+    MOV DL, 14
+    INT 10H
+
+    LEA DX, T2
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 10
+    MOV DL, 14
+    INT 10H
+
+    LEA DX, T4
+    MOV AH, 9
+    INT 21H
+
+    ; LOGO DISPLAY END -----------------
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 12
+    MOV DL, 22
+    INT 10H
+
+    LEA DX, TAGLINE  ; DEVELOPER NAME DISPLAY
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 13
+    MOV DL, 24
+    INT 10H
+
+    LEA DX, PAK  ; PRESS ANY KEY
+    MOV AH, 9
+    INT 21H
+
+    MOV AH, 7    ; INPUT WITHOUT ECHO
+    INT 21H
+
+    ; CLEAR SCREEN
+
+    MOV AX, 0600H
+    MOV BH, 07H
+    MOV CX, 0000H
+    MOV DX, 184FH
+    INT 10H
+
+ENDM ; Fin del macro TITLESCREEN_MACRO  
+
+
+
+MACRO RULES_MACRO   ;se define el macro que mostrara en pantalla las reglas
+    ;El codigo repite un proceso para configurar el cursor y mostrar una serie de reglas etiquetadas desde "R1" hasta "R7".
+    
+   
+    ; SET CURSOR
+    MOV AH, 2  ;carga el valor en el registro AH, lo que indica una operacion para configurar la posicion del cursosr en pantalla                                                           
+    MOV BH, 0  ;se limpia el registro BH
+    MOV DH, 6  ;se carga el valor 6 en DH, representando la fila donde estara el cursor                                                                                                                  
+    
+    MOV DL, 7 ;Carga el valor 7 en el registro DL, que representa la columna en la que se colocara el cursor.
+    INT 10H  ;se llama a la interrupcion 10H del bios, lo que configura la posicion del cursos en pantalla
+    
+    LEA DX, R ; carga la direccion de la cadena de caracteres "R" en DX
+    MOV AH, 9  ;carga el valor 9 en AH, indicando que se imprimira una cadena en la pantalla
+    INT 21H  ;se llama a la interupcion 21h para imprimir la cadena "R" en posicion del cursor
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 7
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R1 ; RULE 1
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 8
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R2 ; RULE 2
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 9
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R3 ; RULE 3
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 10
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R4 ; RULE 4
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 11
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R5 ; RULE 5
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 12
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R6
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 13
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, R7
+    MOV AH, 9
+    INT 21H
+    
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 15
+    MOV DL, 7
+    INT 10H
+    
+    LEA DX, PAK ; PRESS ANY KEY
+    MOV AH, 9
+    INT 21H
+    
+    MOV AH, 7 ; INPUT WITHOUT ECHO
+    INT 21H
+ENDM
+
+MACRO InitializeVariables ;se define la macro que inicializara las variabñes
+    
+    MOV PLAYER, 50     ; se inicializa PLAYER. Mueve el valor 50 a la variable llamada PLAYER. 
+    MOV MOVES, 0       ; se inicializa MOVES. Se inicializa esta variable en cero. Esta variable contara los movimientos que hace cada jugador
+    MOV DONE, 0        ; se inicializa la variable DONE en 0, la cual se usara para indicar que el juego no ha terminado
+    MOV DR, 0          ; se inicializa la variable DR (abreviada de DRAW), la cual se usara para indicar si ha habido un empate en el juego
+             
+             
+             
+             
+    ;Las siguientes lineas de codigo asignan valores numericos a las variables "C1" a "C9".
+    ;Estos valores representan las celdas del juego        
+             
+    MOV C1, 49
+    MOV C2, 50
+    MOV C3, 51
+    MOV C4, 52
+    MOV C5, 53
+    MOV C6, 54
+    MOV C7, 55
+    MOV C8, 56
+    MOV C9, 57
+ENDM
+         
+         
+MACRO VICTORY_MACRO   
+    ;Este macro muestra un mensaje de victoria en la pantalla
+    ; y espera que el usuario presione una tecla para continuar
+    
+  
+    LEA DX, W1;Carga la direccion de la cadena de caracteres etiquetada como W1 en el registro DX.
+    MOV AH, 9;Carga el valor 9 en el registro AH, lo cual indica que se imprimira una cadena en la pantalla.
+    INT 21H;Llama a la interrupcion 21H del DOS para imprimir la cadena W1 en la posicion del cursor.
+
+    LEA DX, PLAYER ;Carga la direccion de PLAYER en el registro DX
+    MOV AH, 9 ;Carga el valor 9 en el registro AH, lo cual indica que se imprimira una cadena en la pantalla.
+    INT 21H  ;Llama a la interrupcion 21H del DOS para imprimir al jugador que gana el juego
+
+    LEA DX, W2;Carga la direccion W2 en el registro DX
+    MOV AH, 9;Carga el valor 9 en el registro AH, lo cual indica que se imprimira una cadena en la pantalla
+    
+    INT 21H;;Llama a la interrupcion 21H del DOS para imprimir al jugador que gana el juego
+
+    ; SET CURSOR
+    MOV AH, 2  ; se configura el registro AH para realizar una configuracion del cursor
+    MOV DH, 17; se carga el valor 17 en el registro DH, que representa la fila en la que se colocara el cursor.
+    MOV DL, 28; se carga el valor 28 en el registro DL, que representa la columna en la que se colocara el cursor.
+    INT 10H ; se llama a la interrupción 10H del BIOS para configurar la posición del cursor en la pantalla.
+
+    LEA DX, PAK ; PRESS ANY KEY. Se carga la direccion de la cadena de caracteres PAK en el registro DX
+    MOV AH, 9  ;;Carga el valor 9 en el registro AH, lo cual indica que se imprimira una cadena en la pantalla
+    
+    INT 21H; se llama a la interrupcion 21H del DOS para imprimir PAK
+
+    MOV AH, 7 ; INPUT WITHOUT ECHO. Se configura el registro AH para realizar una operacion de entrada sin eco (el usuario presionara una tecla, pero no se mostrara en la pantalla).
+    INT 21H ;se llama a la interrupcion 21H del DOS para recibir una entrada del usuario.
+ENDM     
+         
+MACRO DRAW_VICTORY
+    LEA DX, DRW
+    MOV AH, 9
+    INT 21H
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV DH, 17
+    MOV DL, 28
+    INT 10H
+
+    LEA DX, PAK ; PRESS ANY KEY
+    MOV AH, 9
+    INT 21H
+
+    MOV AH, 7 ; INPUT WITHOUT ECHO
+    INT 21H
+ENDM
+ 
+ 
+MACRO TRYAGAIN_MACRO 
+    ;realiza varias operaciones relacionadas con la entrada del usuario y la limpieza de la pantalla.
+    
+    
+    ; CLEAR SCREEN
+    MOV AH, 06H; se configura el registro AH para realizar una operación de borrar pantalla.
+    MOV AL, 00H ; se limpia el registro AL
+    MOV BH, 07H;se carga el valor hexadecimal 07 en el registro BH.
+
+    MOV CX, 0000H  ; se limpia el registro CX estableciendolo en 0
+    MOV DX, 184FH ; se carga el valor hexadecimal 184F en el registro DX
+    INT 10H   ; se llama a la interrupcion 10H del BIOS para borrar la pantalla 
+
+    ; SET CURSOR
+    MOV AH, 2; se configura el registro AH para realizar una operacion de configuracion del cursor.
+    MOV BH, 0; se limpia el registro BH
+    MOV DH, 10 ;se carga el valor 10 en el registro DH, que representa la fila en la que se colocara el cursor.
+    MOV DL, 24;se carga el valor 24 en el registro DL, que representa la columna en la que se colocara el cursor.
+    INT 10H;se llama a la interrupcion 10H del BIOS para configurar la posicion del cursor en la pantalla.
+
+    LEA DX, TRA   ; se carga la direccion de la cadena de caracteres etiquetada como "TRA" en el registro DX.
+    MOV AH, 9  ;se carga el valor 9 en el registro AH, indicando que se imprimira una cadena en la pantalla.
+    INT 21H ;se llama a la interrupcion 21H del DOS para imprimir la cadena "TRA" (que podria ser un mensaje de "TRY AGAIN PROMPT") en la posicion del cursor.
+
+    MOV AH, 1; se configura el registro AH para realizar una operacion de entrada con eco (el usuario verá lo que escriba).     
+    INT 21H;se llama a la interrupcion 21H del DOS para recibir una entrada del usuario y la almacena en el registro AL
+
+    
+    ; REVISA SI LA ENTRADA DEL USUARIO ES 'y'
+    CMP AL, 121 ;Compara el valor en AL con 121, que representa el caracter 'y'. 
+    JZ INIT 
+        
+    
+                             
+    ; REVISA SI LA ENTRADA DEL USUARIO ES 'Y'
+    CMP AL, 89 ;Compara el valor en AL con 89, que representa el caracter 'Y'.  
+    JZ INIT
+
+    ; SI LA ENTRADA ES 'Y' o 'y', el juego se reinicia
+
+    CMP AL, 110  ; CHECK IF INPUT IS 'n'
+    JZ EXIT
+    CMP AL, 78   ; CHECK IF INPUT IS 'N'
+    JZ EXIT
+
+    ; SI LA ENTRADA ES 'N' o 'n', el juego termina
+
+    ; Y SI LA ENTRADA ES INVALIDAD
+    ; SET CURSOR
+    MOV AH, 2; se configura el registro AH para realizar una operación de configuración del cursor.
+    MOV BH, 0; se reinicia el registro BH
+    MOV DH, 10; se carga el valor 10 en el registro DH, que representa la fila en la que se colocará el cursor.;
+    MOV DL, 24; se carga el valor 10 en el registro DH, que representa la fila en la que se colocará el cursor.
+    INT 10H;se llama a la interrupcion 10H del BIOS para configurar la posicion del cursor en la pantalla, que es la misma posicion en la que se solicita la entrada al usuario.
+
+    
+    ; mensaje de entrada invalida:
+    LEA DX, WI ;se carga la direccion de la cadena de caracteres etiquetada como "WI" en el registro DX 
+    MOV AH, 9 ;se carga el valor 9 en el registro AH, indicando que se imprimira una cadena en la pantalla.
+    INT 21H;Llama a la interrupcion 21H del DOS para imprimir el mensaje de error en la posicion del cursor, indicando que la entrada del usuario es invalida 
+
+    MOV AH, 7 ;Configura el registro AH para realizar una operacion de entrada sin eco (el usuario presionara una tecla, pero no se mostrara en la pantalla).
+    INT 21H;se llama a la interrupción 21H del DOS para recibir una entrada del usuario, que en este caso se utiliza para limpiar la entrada incorrecta sin mostrarla.
+
+    ; SET CURSOR
+    MOV AH, 2
+    MOV BH, 0
+    MOV DH, 10
+    MOV DL, 24
+    INT 10H
+
+    LEA DX, EMP  ; EMPTY LINE TO OVERWRITE ANOTHER LINE TO CLEAN THE SPACE
+    MOV AH, 9
+    INT 21H
+ENDM         
+          
+          
+PLRCHANGE_MACRO MACRO
+    CMP PLAYER, 49;Compara el valor en la variable "PLAYER" con 49, que es el valor ASCII de '1'.
+        JZ P2         ;Si la comparación es verdadera (el jugador actual es el jugador 1), salta a la etiqueta P2
+        CMP PLAYER, 50;Compara el valor en la variable "PLAYER" con 50, que es el valor ASCII de '2'.
+        JZ P1         ;Compara el valor en la variable "PLAYER" con 50, que es el valor ASCII de '2'.
+        
+        P1:;Etiqueta que se ejecuta si el jugador actual es el jugador 1.
+            MOV PLAYER, 49 ;Establece el valor de la variable "PLAYER" en 49, que es el valor ASCII de '1', indicando que el turno ha cambiado al jugador 2.
+            MOV CUR, 88                          
+            JMP BOARD;Salta a la etiqueta BOARD, que probablemente se utiliza para continuar el juego.
+             
+        P2:;Etiqueta que se ejecuta si el jugador actual es el jugador 2.
+            MOV PLAYER, 50 ;Establece el valor de la variable "PLAYER" en 50, que es el valor ASCII de '2', indicando que el turno ha cambiado al jugador 1.
+            MOV CUR, 79
+            JMP BOARD; Salta a la etiqueta BOARD, que probablemente se utiliza para continuar el juego.
+
+ENDM
+
+CHECK_MACRO MACRO
+
+ CHECK1:  ; CHECKING 1, 2, 3 
+            MOV AL, C1 ;Mueve el valor almacenado en la ubicación de memoria C1 al registro AL. C1 parece ser una variable que almacena el valor de una casilla del tablero.
+            MOV BL, C2 ;Mueve el valor almacenado en la ubicación de memoria C2 al registro BL. C2 también parece ser una variable que almacena el valor de una casilla del tablero.
+            MOV CL, C3;Mueve el valor almacenado en la ubicación de memoria C3 al registro CL. C3 es otra variable que almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL ;Compara los valores en los registros AL y BL. Este comando compara si la casilla C1 es igual a la casilla C2.
+            JNZ CHECK2 ; Salta a la etiqueta CHECK2 si la comparacion anterior no es igual. Esto indica que si las casillas C1 y C2 no son iguales, el programa pasara a verificar la siguiente combinacion.
+            
+            CMP BL, CL ;Compara los valores en los registros BL y CL. Este comando compara si la casilla C2 es igual a la casilla C3.
+            JNZ CHECK2 ;si la comparación anterior no es igual, salta a la etiqueta CHECK2. Esto indica que si las casillas C2 y C3 no son iguales, el programa también pasa a verificar la siguiente combinación.
+            
+            MOV DONE, 1;i la comparación anterior no es igual, salta a la etiqueta CHECK2. Esto indica que si las casillas C2 y C3 no son iguales, el programa también pasa a verificar la siguiente combinación.
+            JMP BOARD ;Salta al tablero (board). 
+            
+        CHECK2:  ; CHECKING 4, 5, 6 
+            MOV AL, C4 ;Mueve el valor almacenado en la ubicación de memoria C4 al registro AL. C4  almacena el valor de una casilla del tablero.
+            MOV BL, C5 ;Mueve el valor almacenado en la ubicación de memoria C5 al registro BL. C5  almacena el valor de una casilla del tablero.
+            MOV CL, C6 ;Mueve el valor almacenado en la ubicación de memoria C6 al registro CL. C6  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL; Compara los valores en los registros AL y BL. Compara si la casilla C4 es igual a la C5
+            JNZ CHECK3; Salta a la etiqueta CHECK3 si la comparacion anterior no es igual. Esto indica que las casillas C4 y C5 no son iguales, se pasa a verificar la siguiente combinacion
+            
+            CMP BL, CL;Compara los valores en los registros BL y CL. Este comando compara si la casilla C5 es igual a la casilla C6.
+            JNZ CHECK3; si la compracion anterior no es igual, salta a la etiqueta CHECK3
+            
+          
+            MOV DONE, 1; 
+            JMP BOARD; Salta al tablero(board)
+            
+           
+       CHECK3:  ; CHECKING 7, 8, 9
+            MOV AL, C7 ;Mueve el valor almacenado en la ubicación de memoria C7 al registro AL. C7  almacena el valor de una casilla del tablero.
+            MOV BL, C8 ;Mueve el valor almacenado en la ubicación de memoria C8 al registro BL. C8  almacena el valor de una casilla del tablero.
+            MOV CL, C9 ;Mueve el valor almacenado en la ubicación de memoria C9 al registro CL. C9  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL; Compara los valores en los registros AL y BL. Compara si la casilla C7 es igual a la C6
+            JNZ CHECK4; Salta a la etiqueta CHECK4 si la comparacion anterior no es igual. Esto indica que las casillas C7 y C6 no son iguales, se pasa a verificar la siguiente combinacion
+            
+            CMP BL, CL ;Compara los valores en los registros BL y CL. Este comando compara si la casilla C8 es igual a la casilla C9
+            JNZ CHECK4 ; Salta a la etiqueta CHECK4 si la comparacion anterior no es igual. Esto indica que las casillas C8 y C9 no son iguales, se pasa a verificar la siguiente combinacion
+            
+            MOV DONE, 1
+            JMP BOARD; salta al tablero
+            
+             
+       CHECK4:   ; CHECKING 1, 4, 7
+            MOV AL, C1 ;Mueve el valor almacenado en la ubicación de memoria C1 al registro AL. C1  almacena el valor de una casilla del tablero.
+            MOV BL, C4 ;Mueve el valor almacenado en la ubicación de memoria C4 al registro AL. C4  almacena el valor de una casilla del tablero.
+            MOV CL, C7 ;Mueve el valor almacenado en la ubicación de memoria C7 al registro AL. C7  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL;Compara los valores en los registros AL y BL. Compara si la casilla C1 es igual a la C4
+            JNZ CHECK5
+            
+            CMP BL, CL;Compara los valores en los registros CL y BL. Compara si la casilla C4 es igual a la C7
+            JNZ CHECK5
+        
+            MOV DONE, 1
+            JMP BOARD; salta al tablero
+        
+       
+       CHECK5:   ; CHECKING 2, 5, 8
+            MOV AL, C2 ;Mueve el valor almacenado en la ubicación de memoria C2 al registro AL. C2  almacena el valor de una casilla del tablero.
+            MOV BL, C5 ;Mueve el valor almacenado en la ubicación de memoria C5 al registro AL. C5  almacena el valor de una casilla del tablero.
+            MOV CL, C8 ;Mueve el valor almacenado en la ubicación de memoria C8 al registro AL. C8  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL ;Compara los valores en los registros AL y BL. Compara si la casilla C2 es igual a la C5
+            JNZ CHECK6
+            
+            CMP BL, CL ;Compara los valores en los registros CL y BL. Compara si la casilla C5 es igual a la C8
+            JNZ CHECK6
+        
+            MOV DONE, 1
+            JMP BOARD; salta al tablero
+            
+       
+       CHECK6:   ; CHECKING 3, 6, 9
+            MOV AL, C3 ;Mueve el valor almacenado en la ubicación de memoria C3 al registro AL. C3  almacena el valor de una casilla del tablero.
+            MOV BL, C6 ;Mueve el valor almacenado en la ubicación de memoria C6 al registro AL. C6  almacena el valor de una casilla del tablero.
+            MOV CL, C9 ;Mueve el valor almacenado en la ubicación de memoria C9 al registro AL. C9  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL
+            JNZ CHECK7
+            
+            CMP BL, CL
+            JNZ CHECK7
+        
+            MOV DONE, 1
+            JMP BOARD; salta al tablero
+            
+        
+        CHECK7:   ; CHECKING 1, 5, 9
+            MOV AL, C1 ;Mueve el valor almacenado en la ubicación de memoria C1 al registro AL. C1  almacena el valor de una casilla del tablero.
+            MOV BL, C5  ;Mueve el valor almacenado en la ubicación de memoria C5 al registro AL. C5  almacena el valor de una casilla del tablero.
+            MOV CL, C9 ;Mueve el valor almacenado en la ubicación de memoria C9 al registro AL. C9  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL
+            JNZ CHECK8
+            
+            CMP BL, CL
+            JNZ CHECK8
+        
+            MOV DONE, 1
+            JMP BOARD  ;salta al tablero
+            
+        
+        CHECK8:   ; CHECKING 3, 5, 7
+            MOV AL, C3 ;Mueve el valor almacenado en la ubicación de memoria C3 al registro AL. C3  almacena el valor de una casilla del tablero.
+            MOV BL, C5 ;Mueve el valor almacenado en la ubicación de memoria C5 al registro AL. C5  almacena el valor de una casilla del tablero.
+            MOV CL, C7 ;Mueve el valor almacenado en la ubicación de memoria C7 al registro AL. C7  almacena el valor de una casilla del tablero.
+            
+            CMP AL, BL
+            JNZ DRAWCHECK
+            
+            CMP BL, CL
+            JNZ DRAWCHECK
+            
+            MOV DONE, 1
+            JMP BOARD;salta al tablero
+            
+       DRAWCHECK:
+            MOV AL, MOVES;Mueve el valor de la variable MOVES al registro
+            CMP AL, 9  ;Compara el valor en AL (el número de movimientos) con 9, que es el número total de casillas en un juego de tres en línea
+            JB PLRCHANGE  ;Si el valor en AL es menor que 9 (es decir, si no se han realizado 9 movimientos), salta a la etiqueta PLRCHANGE. Esto sugiere que el juego aun no ha terminado en empate y que se debe continuar jugando.
+            
+            MOV DR, 1  ;Si se llega a este punto (cuando el número de movimientos es igual a 9, lo que implica un empate), se mueve el valor 1 al registro DR
+            JMP BOARD;Se salta a la etiqueta BOARD.
+            
+            JMP EXIT
+       ENDM
+       
